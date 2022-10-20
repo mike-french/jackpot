@@ -60,47 +60,6 @@ the HiLo algorithm,
 and the game graph used to analyze play, 
 see the main Jackpot module documentation.
 
-## Output
-
-If you want to see the results without running the code, 
-here is the output for win percentage (%).
-
-```
-CALCULATED
-Elixir.Jackpot.AgentMin      : 1.3306
-Elixir.Jackpot.AgentMax      : 4.7706
-Elixir.Jackpot.AgentFirst    : 1.3105
-Elixir.Jackpot.AgentLast     : 5.2248
-Elixir.Jackpot.AgentHiLo     : 7.9855
-Elixir.Jackpot.AgentHiLo2    : 7.9855
-..
-.MONTE CARLO (100000)
-Elixir.Jackpot.AgentMin      : 1.355
-Elixir.Jackpot.AgentMax      : 4.704
-Elixir.Jackpot.AgentFirst    : 1.317
-Elixir.Jackpot.AgentLast     : 5.232
-Elixir.Jackpot.AgentHiLo     : 7.965
-Elixir.Jackpot.AgentHiLo2    : 8.031
-```
-HiLo wins about 8% of the time, so about 2 games in 25.
-
-## Install
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `jackpot` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:jackpot, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/jackpot](https://hexdocs.pm/jackpot).
-
 ## Use
 
 Run the test that generates analytic calculations and Monte Carlo simulation results.
