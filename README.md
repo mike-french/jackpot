@@ -4,12 +4,12 @@
 
   Jackpot is a simple game of chance played by one person.
 
-  The board has 9 cells labelled 1..9, 
+  The board has a line of 9 cells labelled 1..9, 
   each covered by a wooden tile.
   The tile can lie down flat or be flipped up.
   [The game could also be played with 9 playing cards.]
 
-  The same board is used for a game called Shut The Box,
+  The same board is used for a game called *Shut The Box,*
   but the rules are different. 
   There are also variants of the rules for single-player Jackpot,
   but here we use simple Thai bar rules...
@@ -35,7 +35,7 @@
 
 ## Purpose
 
-**This is not an interactive application to play the game.**
+*This is not an interactive application to play the game.*
 
 There are two areas of functionality:
 - Monte Carlo simulation of random games to establish win/lose statistics.
@@ -46,7 +46,7 @@ There are six implementations of player agents that decide the moves of the game
 - `AgentMax`; choose the highest cell number. 
 - `AgentFirst`; choose the first cell number. 
 - `AgentLast`; choose the last cell number.
-- HiLo: the simple optimal algorithm
+- *HiLo:* the simple optimal algorithm:
   - `AgentHiLo`: using a priority sequence.
   - `AgentHiLo2`: using a max/min rule.
 

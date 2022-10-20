@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.6">
+    <meta name="project" content="Jackpot v0.1.0">
+
+    <title>Jackpot — Jackpot v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-5CLCQQME.css" />
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-X7YVL3G2.js"></script>
+    <script src="dist/sidebar_items-A5FA5F8E.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-PLW5RNNI.js"></script>
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+    <div class="sidebar-projectDetails">
+      <a href="Jackpot.html" class="sidebar-projectName" translate="no">
+Jackpot
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+  <span translate="no">Jackpot</span> 
+  <small class="app-vsn" translate="no">(Jackpot v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<h2 id="module-the-game" class="section-heading">
+  <a href="#module-the-game" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">the-game</p>
+  </a>
+  The Game
+</h2>
+<p>Jackpot is a simple game of chance played by one person.</p><p>The board has 9 cells labelled 1..9, 
+each covered by a wooden tile.
+The tile can lie down flat or be flipped up.</p><p>The same board is used for a game called Shut The Box,
+but the rules are different. 
+There are also variants of the rules for single-player Jackpot,
+but here we use simple Thai bar rules...</p><p>At the beginning of the game, 
+every cell starts in the flat down position.</p><p>For each move, the player rolls 2 six-sided dice, 
+then may flip up exactly one cell that is in the down position,
+but only if the cell number is one of the following:</p><ul><li>individual value of the first die </li><li>individual value of the second die</li><li>combined value of both dice</li></ul><p>For example: a roll of {3,4} provides a choice of cells 3, 4 or 7;
+a roll of {2,2} gives a choice of cells 2 or 4; 
+a roll of {6,6} only allows cell 6, because there is no cell 12.</p><p>If all the cell choices offered by the dice roll 
+are already flipped up, then the game is lost. 
+The game is won if the player succeeds in 
+flipping up all 9 cells.</p><p>Here are some simple initial observations:</p><ul><li><p>Cells 1..6 can be flipped by an individual die value.</p></li><li><p>Cells 2..9 can be flipped by a combined score.</p></li><li><p>Cell 1 can only be flipped by an individual die value.</p></li><li><p>Cells 7, 8, 9 can only be flipped using a combined score.</p></li><li><p>There are 36 possible rolls of 2 dice.</p></li><li><p>There are 2 rolls that only enable 1 cell choice. 
+These are the worst rolls: {5,5} {6,6}.</p></li><li><p>There are 8 rolls that support only 2 cell choices:
+{1,1} {2,2} {3,3} {4,4} {6,4}{4,6} {6,5}{5,6}.</p></li><li><p>The remaining 26 rolls support 3 cell choices.</p></li></ul><h2 id="module-cell-probabilities" class="section-heading">
+  <a href="#module-cell-probabilities" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">cell-probabilities</p>
+  </a>
+  Cell Probabilities
+</h2>
+<p>The total probability for having a choice of flipping a cell 
+is the sum of probabilities for the first die value, 
+the second die value, and the combined total of both dice.</p><p>Here is the matrix of possibilities.
+All probabilities are expressed as units of 1/36.</p><pre><code class="makeup elixir" translate="no"><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w">
+</span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">                    </span><span class="n">cell</span><span class="w">                    </span><span class="o">|</span><span class="w">
+</span><span class="o">+</span><span class="w">       </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w">
+</span><span class="o">|</span><span class="w">  </span><span class="n">dice</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">5</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">7</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">8</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">9</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w">
+</span><span class="o">|</span><span class="w">   </span><span class="nc">A</span><span class="w">   </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">  </span><span class="nc">P</span><span class="p" data-group-id="4635028079-1">(</span><span class="n">cell</span><span class="p" data-group-id="4635028079-1">)</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="o">|</span><span class="w">   </span><span class="nc">B</span><span class="w">   </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">  </span><span class="n">unit</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="o">|</span><span class="w">  </span><span class="nc">A</span><span class="o">+</span><span class="nc">B</span><span class="w">  </span><span class="o">|</span><span class="w">    </span><span class="o">|</span><span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">5</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">5</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="mi">1</span><span class="o">/</span><span class="mi">36</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w">
+</span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">17</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">5</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w">   </span><span class="nc">Total</span><span class="w">  </span><span class="o">|</span><span class="w">
+</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">+</span></code></pre><h2 id="module-hilo-strategy" class="section-heading">
+  <a href="#module-hilo-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">hilo-strategy</p>
+  </a>
+  HiLo Strategy
+</h2>
+<p>The HiLo strategy is based on probabilities of 
+getting a dice roll that can flip the cell.</p><p>The HiLo strategy chooses the cell with the lowest probability 
+of being allowed by a roll of 2 dice.
+The priority sequence of cells with increasing probability is:</p><p>   (lowest) <code class="inline">9, 8, 7, 1, 2, 3, 4, 5, 6</code> (highest)</p><p>Another way to think about the sequence is to 
+choose the high combined dice values (9,8,7) if possible,
+otherwise choose the lowest number cell allowed.</p><p>  Note the lowest probability cell is 9, so these are the best rolls:
+{5,4}{4,5} {6,3}{3,6}.</p><h2 id="module-game-graph" class="section-heading">
+  <a href="#module-game-graph" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">game-graph</p>
+  </a>
+  Game Graph
+</h2>
+<p>A game graph is a directed graph
+containing board positions as nodes and moves as edges.
+The set of nodes contains all 512 possible board positions.
+The board position nodes are labelled with the integer index
+calculated from treating the cells as binary digits,
+from 1 (least significant) to 9 (most significant).</p><p>Each node has up to 36 outgoing edges corresponding to the 
+allowed legal moves chosen by a player.
+The graph is layered by how many moves have been made
+from 0 (start) to 9 (win). 
+So the layer number, n, is equal to how many cells are flipped up,
+and hence the number of 1s in the binary index.
+The number of nodes in layer n is the binomial coefficient 9Cn,
+so the layer populations are [1,9,36,84,126,126,84,36,9,1].</p><p>There are no edges within a layer. 
+Each layer only has edges going out to members of the next highest layer.
+The root (source) node is the starting position (index 0), 
+which does not have any incoming edges.
+The final (sink) node is the winning position (index 511),
+which does not have any outgoing edges.  </p><pre><code class="makeup elixir" translate="no"><span class="w">                      </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w">
+               </span><span class="nc">START</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">|</span><span class="w">                               </span><span class="nc">Layer</span><span class="w"> </span><span class="mi">0</span><span class="w">
+                      </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w">
+                     </span><span class="o">//</span><span class="o">/</span><span class="o">|</span><span class="o">\\</span><span class="o">\\</span><span class="err">\</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">moves</span><span class="w">
+                        </span><span class="o">|</span><span class="n">flip</span><span class="w"> </span><span class="mi">4</span><span class="w">
+      </span><span class="p">:</span><span class="w">     </span><span class="p">:</span><span class="w">     </span><span class="p">:</span><span class="w">     </span><span class="o">|</span><span class="w">      </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">     </span><span class="p">:</span><span class="w">       </span><span class="p">:</span><span class="w">
+    </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> 
+    </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">128</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="nc">Layer</span><span class="w"> </span><span class="mi">1</span><span class="w">
+    </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w">
+      </span><span class="o">|</span><span class="w">     </span><span class="o">/</span><span class="w">     </span><span class="p">:</span><span class="w">     </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">
+      </span><span class="o">|</span><span class="w">    </span><span class="o">/</span><span class="w">
+</span><span class="n">flip</span><span class="w"> </span><span class="mi">2</span><span class="o">|</span><span class="w">   </span><span class="o">/</span><span class="n">flip</span><span class="w"> </span><span class="mi">1</span><span class="w">
+      </span><span class="o">|</span><span class="w">  </span><span class="o">/</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="w">   </span><span class="p">:</span><span class="w">     </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">  
+    </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w"> 
+    </span><span class="o">|</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">17</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">...</span><span class="o">..</span><span class="w"> </span><span class="mi">36</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="n">...</span><span class="o">.</span><span class="w">          </span><span class="nc">Layer</span><span class="w"> </span><span class="mi">2</span><span class="w">
+    </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w"> </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">+</span><span class="w">                                </span><span class="p">:</span><span class="w">
+      </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">    </span><span class="p">:</span><span class="w">      </span><span class="p">:</span><span class="w">                                  </span><span class="p">:</span><span class="w">
+                                                            </span><span class="p">:</span><span class="w">
+                                                            </span><span class="p">:</span><span class="w">
+                        </span><span class="err">\</span><span class="o">|</span><span class="o">/</span><span class="w"> </span><span class="n">winning</span><span class="w"> </span><span class="n">moves</span><span class="w">                   </span><span class="p">:</span><span class="w">
+                      </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w">                               </span><span class="p">:</span><span class="w">
+                 </span><span class="nc">WIN</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">511</span><span class="w"> </span><span class="o">|</span><span class="w">                             </span><span class="nc">Layer</span><span class="w"> </span><span class="mi">9</span><span class="w">
+                      </span><span class="o">+</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="o">+</span><span class="w">               </span></code></pre><p>The outgoing edges from a board position node
+go the next position node in the game Graph.
+The edge corresponds to the flipping of exactly one cell in the board.
+Each edge is weighted with the count of the number of rolls of the dice
+that would lead to that move being chosen by a specific player.</p><p>For example, the 15 rolls {1,3} {3,1} {2,2} {4,<em>} {</em>,4} might all 
+result in flipping cell 4 and moving to the same next position node,
+so the edge count would be 15.</p><p>Each node also stores the probability of reaching that position,
+which is the sum of probabilites along each path of edges 
+leading to the position. </p><p>To calculate the full set of probabilities for every node in the graph:</p><ul><li>Initialize the probability of the start node (index 0) to 1.0.</li><li>For each position node, in order of layers:<ul><li>For each edge going out from the source node:<ul><li>Calculate the edge contribution as the source node probability
+multiplied by the edge weight, which is edge count/36.</li><li>Increment the destination node probability with the edge contribution.</li></ul></li></ul></li><li>At the last node (index 511, layer 9), there are no outgoing edges,
+and the final value is the winning probability.</li></ul><h2 id="module-hilo-success-rate" class="section-heading">
+  <a href="#module-hilo-success-rate" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">hilo-success-rate</p>
+  </a>
+  HiLo Success Rate
+</h2>
+<p>Just in case you want the answer without running the code:
+game graph analysis calculates the success rate of HiLo as 7.9855 %,
+so about 2 wins in every 25 games.</p>
+  </section>
+
+
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.6) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+  </body>
+</html>
