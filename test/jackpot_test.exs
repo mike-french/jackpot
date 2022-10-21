@@ -12,53 +12,11 @@ defmodule JackpotTest do
   alias Jackpot.Dice
   alias Jackpot.Game
   alias Jackpot.Graph
+  alias Jackpot.Util
 
   @agents [AgentMin, AgentMax, AgentFirst, AgentLast, AgentHiLo, AgentHiLo2]
 
-  @new_board %{
-    1 => false,
-    2 => false,
-    3 => false,
-    4 => false,
-    5 => false,
-    6 => false,
-    7 => false,
-    8 => false,
-    9 => false
-  }
-
-  test "board" do
-    board = Board.new()
-
-    assert board == @new_board
-    assert not Board.win?(board)
-    assert Board.index(board) == 0
-
-    assert Enum.map(1..9, fn c -> assert not Board.cell?(board, c) end)
-
-    board = Board.flip(board, 1)
-    assert Board.cell?(board, 1)
-    assert Board.index(board) == 1
-
-    board = Board.flip(board, 4)
-    assert Board.cell?(board, 4)
-    assert Board.index(board) == 9
-    assert_raise RuntimeError, "Cell 4 is already flipped", fn -> Board.flip(board, 4) end
-
-    assert not Board.win?(board)
-
-    board = Enum.reduce(1..9, @new_board, fn i, board -> Board.flip(board, i) end)
-    assert Board.win?(board)
-    assert Board.index(board) == 511
-
-    for i <- 0..511 do
-      assert i |> Board.new() |> Board.index() == i
-    end
-
-    boards = Board.all_boards()
-    assert boards |> Map.keys() |> Enum.sort() == Enum.to_list(0..511)
-    Enum.each(boards, fn {i, board} -> assert Board.index(board) == i end)
-  end
+  @new_board for i <- 1..9, into: %{}, do: {i, false}
 
   test "dice" do
     {d1, d2} = roll = Dice.roll()
@@ -100,6 +58,54 @@ defmodule JackpotTest do
     # {6,4} {4,6} {5,6} {6,5}   {1,1} {2,2} {3,3} {4,4}  
     assert nchoice |> Map.fetch!(2) |> length() == 8
     assert nchoice |> Map.fetch!(3) |> length() == 26
+  end
+
+  test "board" do
+    board = Board.new()
+
+    assert board == @new_board
+    assert not Board.win?(board)
+    assert Board.index(board) == 0
+
+    assert Enum.map(1..9, fn c -> assert not Board.cell?(board, c) end)
+
+    Enum.each(1..9, fn c ->
+      i = 0
+      j = board |> Board.flip(c) |> Board.index()
+      assert Util.cell_move(i, j) == c
+    end)
+
+    assert_raise RuntimeError, "Not successive positions: 0 3", fn -> Util.cell_move(0, 3) end
+
+    board = Board.flip(board, 1)
+    assert Board.cell?(board, 1)
+    assert Board.index(board) == 1
+
+    board = Board.flip(board, 4)
+    assert Board.cell?(board, 4)
+    assert Board.index(board) == 9
+    assert_raise RuntimeError, "Cell 4 is already flipped", fn -> Board.flip(board, 4) end
+
+    assert not Board.win?(board)
+
+    board = Enum.reduce(1..9, @new_board, fn i, board -> Board.flip(board, i) end)
+    assert Board.win?(board)
+    assert Board.index(board) == 511
+
+    for i <- 0..511 do
+      assert i |> Board.new() |> Board.index() == i
+    end
+
+    expect = [1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
+    layers = Util.layers()
+
+    Enum.each(0..9, fn n ->
+      assert length(Map.fetch!(layers, n)) == Enum.at(expect, n)
+    end)
+
+    boards = Board.all_boards()
+    assert boards |> Map.keys() |> Enum.sort() == Enum.to_list(0..511)
+    Enum.each(boards, fn {i, board} -> assert Board.index(board) == i end)
   end
 
   for agent <- [AgentHiLo, AgentHiLo2] do
@@ -146,5 +152,25 @@ defmodule JackpotTest do
       label = String.pad_trailing("#{agent} ", 29)
       IO.inspect(stats.win, label: label)
     end
+  end
+
+  # @tag :skip
+  test "dot" do
+    graph =
+      AgentHiLo2
+      |> Graph.build()
+      |> Graph.propagate()
+
+    graph
+    |> Graph.to_dot(false, "hilo-no-move-label")
+    |> elem(0)
+    |> Graph.render()
+    |> IO.inspect()
+
+    graph
+    |> Graph.to_dot(true, "hilo-move-label")
+    |> elem(0)
+    |> Graph.render()
+    |> IO.inspect()
   end
 end

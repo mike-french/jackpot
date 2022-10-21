@@ -116,9 +116,9 @@ defmodule Jackpot do
                         +---+
                  START  | 0 |                               Layer 0
                         +---+
-                       ///|\\\\\\\\\\ first moves
-                          |flip 4
-        :     :     :     |      :      :     :       :
+        :      :       ///|\\\\\\\\\\ first moves
+    flip 1  flip 2        |flip 4
+        |     |     :     |      :      :     :       :
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+ 
       | 1 | | 2 | | 4 | | 8 | | 16 | | 32 | | 64 | | 128 |  Layer 1
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+
@@ -126,14 +126,14 @@ defmodule Jackpot do
         |    /
   flip 2|   /flip 1
         |  /
-        | /   :     :      :  
-      +---+ +---+ +---+ +----+ 
-      | 3 | | 5 | | 9 | | 17 | ..... 36 nodes ....          Layer 2
-      +---+ +---+ +---+ +----+                                :
-        :      :    :      :                                  :
+        | /   :     :     :  
+      +---+ +---+ +---+ +---+ 
+      | 3 | | 5 | | 6 | | 9 | ..... 36 nodes ....           Layer 2
+      +---+ +---+ +---+ +---+                                 :
+        :      :    :     :                                   :
                                                               :
                                                               :
-                          \\|/ winning moves                   :
+                         \\|/ winning moves                   :
                         +-----+                               :
                    WIN  | 511 |                             Layer 9
                         +-----+               
@@ -226,6 +226,19 @@ defmodule Jackpot do
     """
     @type index() :: 0..511
     defguard is_index(ix) when is_integer(ix) and 0 <= ix and ix < 512
+
+    @typedoc """
+    The set of possible board indexes after each move.
+    The list of indexes in each layer is sorted in ascending order.
+
+    Layer 0 just contains the start position (index 0).
+    Layer 9 just contains the winning position (index 511).
+    The number of nodes in each layer, n, is given by the 
+    binomial coefficients 9Cn:
+
+    `[1,9,36,84,126,126,84,36,9,1]`
+    """
+    @type layers() :: %{(0..9) => [index()]}
 
     @typedoc "The set of all possible boards, accessed by integer index."
     @type boards() :: %{index() => board()}
@@ -368,11 +381,12 @@ defmodule Jackpot do
 
   defmodule Util do
     @moduledoc "Utilities for the Jackpot application."
+    use Bitwise
     require Jackpot.T
 
-    @doc "Calculate percentage to 2 decimal places."
+    @doc "Calculate percentage to 4 decimal places."
     @spec pc(T.probability()) :: T.percent()
-    def pc(x) when is_float(x), do: Float.round(100.0 * x, 4)
+    def pc(x) when T.is_prob(x), do: Float.round(100.0 * x, 4)
 
     @doc """
     Increment an integer value in a map.
@@ -382,6 +396,34 @@ defmodule Jackpot do
     def inc(map, key) when is_map(map) do
       n = Map.get(map, key, 0)
       Map.put(map, key, n + 1)
+    end
+
+    @doc "Get the set of layers for all indexes."
+    @spec layers() :: T.layers()
+    def layers() do
+      # process in descending order so that the layer indexes are in ascending order
+      Enum.reduce(511..0, %{}, fn i, layers ->
+        nbits = nbits(i)
+        layer = Map.get(layers, nbits, [])
+        Map.put(layers, nbits, [i | layer])
+      end)
+    end
+
+    @doc "Get the number of set bits (1s) in an integer index."
+    @spec nbits(T.index()) :: 0..9
+    def nbits(index) do
+      Enum.reduce(0..8, 0, fn i, n ->
+        if (index &&& 1 <<< i) > 0, do: n + 1, else: n
+      end)
+    end
+
+    @doc "Get the cell flip between two successive board indexes."
+    @spec cell_move(T.index(), T.index()) :: T.cell()
+    def cell_move(i, j) when T.is_index(i) and T.is_index(j) and j > i do
+      # both xor(j,i) and j-i will work here
+      diff = j - i
+      if nbits(diff) != 1, do: raise("Not successive positions: #{i} #{j}")
+      1 + Enum.find(0..8, 0, fn i -> (diff &&& 1 <<< i) > 0 end)
     end
   end
 
@@ -612,6 +654,7 @@ defmodule Jackpot do
     Finally the win probabillity is read out from the win position node.
     """
     use Bitwise
+    alias Jackpot.Util
 
     @doc "Get the analytic probability of win/lose for a player."
     @spec calculate_outcomes(T.player()) :: T.statistics()
@@ -622,15 +665,23 @@ defmodule Jackpot do
       |> statistics()
     end
 
+    @doc "Get the winning probability from a game graph."
     @spec statistics(T.graph()) :: T.statistics()
-    defp statistics(graph) when is_map(graph) do
+    def statistics(graph) when is_map(graph) do
       # find the winning board node
       {%{}, pwin} = Map.fetch!(graph, 511)
       %{win: Util.pc(pwin), lose: Util.pc(1.0 - pwin)}
     end
 
+    @doc """
+    Build the game graoh for a player.
+
+    Construct all position nodes, 
+    add edges according to the player's moves,
+    and initialize the start position probability to `1.0`.
+    """
     @spec build(T.player()) :: T.graph()
-    defp build(player) do
+    def build(player) do
       all_cells = Dice.all_cells()
       # loop over all boards, each board will be a node
       Enum.reduce(0..511, %{}, fn i, graph ->
@@ -659,36 +710,128 @@ defmodule Jackpot do
       end)
     end
 
+    @doc """
+    Propagate the starting probability through the graph
+    according to the edge weights between nodes. 
+
+    The result is a graph where each node has the 
+    probability of it being reached in a game.
+    The final node (index 511) has the probability of winning.
+    """
     @spec propagate(T.graph()) :: T.graph()
-    defp propagate(graph) do
+    def propagate(graph) do
       # sortng by nbits ensures the order of moves in the game
       # so probability always propagates forwards across layers
       # processed nodes can be removed, except for winning position
-      index_sequence = Enum.sort_by(0..511, &nbits/1)
+      index_sequence = Enum.sort_by(0..511, &Util.nbits/1)
 
       Enum.reduce(index_sequence, graph, fn i, graph ->
         {iedges, iprob} = Map.fetch!(graph, i)
 
-        new_graph =
-          Enum.reduce(iedges, graph, fn {j, count}, graph ->
-            # find the destination node 
-            {jedges, jprob} = Map.fetch!(graph, j)
-            # add probability contribution from i to j
-            new_jprob = jprob + iprob * count / 36.0
-            # replace destination node with updated probability
-            Map.put(graph, j, {jedges, new_jprob})
-          end)
+        # new_graph =
+        Enum.reduce(iedges, graph, fn {j, count}, graph ->
+          # find the destination node 
+          {jedges, jprob} = Map.fetch!(graph, j)
+          # add probability contribution from i to j
+          new_jprob = jprob + iprob * count / 36.0
+          # replace destination node with updated probability
+          Map.put(graph, j, {jedges, new_jprob})
+        end)
 
-        # optionally delete node i here
-        if i < 511, do: Map.delete(new_graph, i), else: new_graph
+        # optionally delete node i here for propagation performancee
+        # if i < 511, do: Map.delete(new_graph, i), else: new_graph
       end)
     end
 
-    @spec nbits(T.index()) :: 0..9
-    defp nbits(index) do
-      Enum.reduce(0..9, 0, fn i, n ->
-        if (index &&& 1 <<< i) > 0, do: n + 1, else: n
-      end)
+    @doc """
+    Convert a graph to a GraphViz DOT format file. 
+    Write the DOT data to file.
+
+    If `edge_flag` is `true` then draw the cell move on edges, 
+    otherwise do not label edges, but do draw layer boxes and titles.
+    """
+    @spec to_dot(T.graph(), boolean(), String.t(), String.t()) ::
+            {path :: String.t(), dot :: IO.chardata()}
+    def to_dot(graph, edge_flag, name, dir \\ "output") do
+      layers = Util.layers()
+
+      # using 'cluster' name prefix to draw box & title for layers
+      # seems to overwhelm GraphViz when it also has edge labels, 
+      # so use non-significant 'layer' prefix in that case
+      subname = if edge_flag, do: "layer", else: "cluster"
+
+      dot = [
+        "digraph G {\n",
+        "  size =\"140,140\";\n",
+        "  ranksep=\"12 equally\";\n",
+        Enum.map(0..9, fn n ->
+          [
+            "  subgraph ",
+            subname,
+            "#{n} {\n",
+            if edge_flag do
+              ""
+            else
+              "  label = \"Layer #{n}\";\n"
+            end,
+            Enum.map(Map.fetch!(layers, n), fn i ->
+              [
+                "    #{i}",
+                case i do
+                  0 -> " [label=\"START\\n0\"]"
+                  511 -> " [label=\"WIN\\n511\"]"
+                  _ -> ""
+                end,
+                ";\n"
+              ]
+            end),
+            "  }\n"
+          ]
+        end),
+        Enum.map(0..510, fn i ->
+          {edges, _prob} = Map.fetch!(graph, i)
+
+          Enum.map(edges, fn {j, _count} ->
+            [
+              "  #{i} -> #{j}",
+              if edge_flag do
+                " [label=\"#{Util.cell_move(i, j)}\"]"
+              else
+                ""
+              end,
+              ";\n"
+            ]
+          end)
+        end),
+        "}"
+      ]
+
+      path = dir <> "/" <> name <> ".dot"
+      if not File.exists?(dir), do: :ok = File.mkdir_p!(dir)
+      file = File.open!(path, [:write, :utf8])
+      IO.write(file, dot)
+      File.close(file)
+      {path, dot}
+    end
+
+    @doc "Render the DOT file to PNG, if GraphViz is installed."
+    @spec render(String.t()) :: :ok | {:error, String.t()}
+    def render(path) do
+      opts = [stderr_to_stdout: true]
+
+      # get the file path up to the '.' filetype suffix
+      f = path |> String.split(".", trim: true) |> hd()
+
+      ret =
+        case System.cmd("which", ["dot"], opts) do
+          {_, 0} -> System.cmd("dot", ["-Tpng", f <> ".dot", "-o", f <> ".png"], opts)
+          {_, status} = err when status > 0 -> err
+        end
+
+      case ret do
+        {_, 0} -> :ok
+        {msg, status} when status > 0 -> {:error, msg}
+      end
     end
   end
 end
