@@ -12,7 +12,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-X7YVL3G2.js"></script>
-    <script src="dist/sidebar_items-A5FA5F8E.js"></script>
+    <script src="dist/sidebar_items-B664BA2C.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -121,6 +121,16 @@ Jackpot
 
       <div class="summary-row">
         <div class="summary-signature">
+          <a href="#cell_move/2" translate="no">cell_move(i, j)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Get the cell flip between two successive board indexes.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
           <a href="#inc/2" translate="no">inc(map, key)</a>
 
         </div>
@@ -132,11 +142,31 @@ If the key is missing, use a default initial value of 0.</p></div>
 
       <div class="summary-row">
         <div class="summary-signature">
+          <a href="#layers/0" translate="no">layers()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Get the set of layers for all indexes.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#nbits/1" translate="no">nbits(index)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Get the number of set bits (1s) in an integer index.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
           <a href="#pc/1" translate="no">pc(x)</a>
 
         </div>
 
-          <div class="summary-synopsis"><p>Calculate percentage to 2 decimal places.</p></div>
+          <div class="summary-synopsis"><p>Calculate percentage to 4 decimal places.</p></div>
 
       </div>
 
@@ -154,6 +184,29 @@ If the key is missing, use a default initial value of 0.</p></div>
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="cell_move/2">
+
+  <div class="detail-header">
+    <a href="#cell_move/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">cell_move(i, j)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cell_move(<a href="Jackpot.T.html#t:index/0">Jackpot.T.index</a>(), <a href="Jackpot.T.html#t:index/0">Jackpot.T.index</a>()) :: <a href="Jackpot.T.html#t:cell/0">Jackpot.T.cell</a>()</pre>
+
+      </div>
+
+<p>Get the cell flip between two successive board indexes.</p>
+  </section>
+</section>
 <section class="detail" id="inc/2">
 
   <div class="detail-header">
@@ -178,6 +231,52 @@ Functions
 If the key is missing, use a default initial value of 0.</p>
   </section>
 </section>
+<section class="detail" id="layers/0">
+
+  <div class="detail-header">
+    <a href="#layers/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">layers()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> layers() :: <a href="Jackpot.T.html#t:layers/0">Jackpot.T.layers</a>()</pre>
+
+      </div>
+
+<p>Get the set of layers for all indexes.</p>
+  </section>
+</section>
+<section class="detail" id="nbits/1">
+
+  <div class="detail-header">
+    <a href="#nbits/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">nbits(index)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> nbits(<a href="Jackpot.T.html#t:index/0">Jackpot.T.index</a>()) :: 0..9</pre>
+
+      </div>
+
+<p>Get the number of set bits (1s) in an integer index.</p>
+  </section>
+</section>
 <section class="detail" id="pc/1">
 
   <div class="detail-header">
@@ -198,7 +297,7 @@ If the key is missing, use a default initial value of 0.</p>
 
       </div>
 
-<p>Calculate percentage to 2 decimal places.</p>
+<p>Calculate percentage to 4 decimal places.</p>
   </section>
 </section>
 

@@ -12,7 +12,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-X7YVL3G2.js"></script>
-    <script src="dist/sidebar_items-A5FA5F8E.js"></script>
+    <script src="dist/sidebar_items-B664BA2C.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -127,11 +127,63 @@ Finally the win probabillity is read out from the win position node.</p>
 
       <div class="summary-row">
         <div class="summary-signature">
+          <a href="#build/1" translate="no">build(player)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Build the game graoh for a player.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
           <a href="#calculate_outcomes/1" translate="no">calculate_outcomes(player)</a>
 
         </div>
 
           <div class="summary-synopsis"><p>Get the analytic probability of win/lose for a player.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#propagate/1" translate="no">propagate(graph)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Propagate the starting probability through the graph
+according to the edge weights between nodes. </p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#render/1" translate="no">render(path)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Render the DOT file to PNG, if GraphViz is installed.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#statistics/1" translate="no">statistics(graph)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Get the winning probability from a game graph.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#to_dot/4" translate="no">to_dot(graph, edge_flag, name, dir \\ &quot;output&quot;)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Convert a graph to a GraphViz DOT format file. 
+Write the DOT data to file.</p></div>
 
       </div>
 
@@ -149,6 +201,31 @@ Finally the win probabillity is read out from the win position node.</p>
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="build/1">
+
+  <div class="detail-header">
+    <a href="#build/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">build(player)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build(<a href="Jackpot.T.html#t:player/0">Jackpot.T.player</a>()) :: <a href="Jackpot.T.html#t:graph/0">Jackpot.T.graph</a>()</pre>
+
+      </div>
+
+<p>Build the game graoh for a player.</p><p>Construct all position nodes, 
+add edges according to the player's moves,
+and initialize the start position probability to <code class="inline">1.0</code>.</p>
+  </section>
+</section>
 <section class="detail" id="calculate_outcomes/1">
 
   <div class="detail-header">
@@ -170,6 +247,106 @@ Functions
       </div>
 
 <p>Get the analytic probability of win/lose for a player.</p>
+  </section>
+</section>
+<section class="detail" id="propagate/1">
+
+  <div class="detail-header">
+    <a href="#propagate/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">propagate(graph)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> propagate(<a href="Jackpot.T.html#t:graph/0">Jackpot.T.graph</a>()) :: <a href="Jackpot.T.html#t:graph/0">Jackpot.T.graph</a>()</pre>
+
+      </div>
+
+<p>Propagate the starting probability through the graph
+according to the edge weights between nodes. </p><p>The result is a graph where each node has the 
+probability of it being reached in a game.
+The final node (index 511) has the probability of winning.</p>
+  </section>
+</section>
+<section class="detail" id="render/1">
+
+  <div class="detail-header">
+    <a href="#render/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">render(path)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> render(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: :ok | {:error, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}</pre>
+
+      </div>
+
+<p>Render the DOT file to PNG, if GraphViz is installed.</p>
+  </section>
+</section>
+<section class="detail" id="statistics/1">
+
+  <div class="detail-header">
+    <a href="#statistics/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">statistics(graph)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> statistics(<a href="Jackpot.T.html#t:graph/0">Jackpot.T.graph</a>()) :: <a href="Jackpot.T.html#t:statistics/0">Jackpot.T.statistics</a>()</pre>
+
+      </div>
+
+<p>Get the winning probability from a game graph.</p>
+  </section>
+</section>
+<section class="detail" id="to_dot/4">
+
+    <span id="to_dot/3"></span>
+
+  <div class="detail-header">
+    <a href="#to_dot/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">to_dot(graph, edge_flag, name, dir \\ &quot;output&quot;)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_dot(<a href="Jackpot.T.html#t:graph/0">Jackpot.T.graph</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {path :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), dot :: <a href="https://hexdocs.pm/elixir/IO.html#t:chardata/0">IO.chardata</a>()}</pre>
+
+      </div>
+
+<p>Convert a graph to a GraphViz DOT format file. 
+Write the DOT data to file.</p><p>If <code class="inline">edge_flag</code> is <code class="inline">true</code> then draw the cell move on edges, 
+otherwise do not label edges, but do draw layer boxes and titles.</p>
   </section>
 </section>
 

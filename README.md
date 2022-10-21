@@ -12,7 +12,7 @@
   but the rules are different. 
   There are also variants of the rules for single-player Jackpot,
   but here we use simple Thai bar rules 
-  [Wikipedia](https://en.wikipedia.org/wiki/Shut_the_box#:~:text=Thai%20style%20(Jackpot)).
+  \[[Wikipedia](https://en.wikipedia.org/wiki/Shut_the_box#:~:text=Thai%20style%20(Jackpot))\].
 
   At the beginning of the game, 
   every cell starts in the flat down position.
@@ -37,13 +37,16 @@
 
 *This is not an interactive application to play the game.*
 
-There are two areas of functionality:
+There are three areas of functionality:
 - Monte Carlo simulation of random games to establish win/lose statistics.
 - Analytic calculation of exact win/lose statistics based on game graph analysis. 
+- Dump game graphs to [GraphViz](https://www.graphviz.org) 
+  DOT format \[[pdf](https://www.graphviz.org/pdf/dotguide.pdf)\], 
+  and optionally generate PNG images if you have GraphViz installed.
 
 ## Simple Analysis
 
-Here are some simple initial observations:
+Here are some initial observations:
 
 - Cells 1..6 can be flipped by an individual die value.
 - Cells 2..9 can be flipped by a combined score.
@@ -127,9 +130,9 @@ which does not have any outgoing edges.
 			+---+
 		 START  | 0 |                               Layer 0
 			+---+
-		       ///|\\\\\\\\\\ first moves
-	  	          |flip 4
-        :     :     :     |      :      :     :       :
+	:     :       ///|\\\\\\\\\\ first moves
+    flip 1  flip 2       |flip 4
+        |     |    :     |      :      :     :       :
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+ 
       | 1 | | 2 | | 4 | | 8 | | 16 | | 32 | | 64 | | 128 |  Layer 1
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+
@@ -137,11 +140,11 @@ which does not have any outgoing edges.
 	|    /
   flip 2|   /flip 1
 	|  /
-	| /   :     :      :  
-      +---+ +---+ +---+ +----+ 
-      | 3 | | 5 | | 9 | | 17 | ..... 36 nodes ....          Layer 2
-      +---+ +---+ +---+ +----+                                :
-	:      :    :      :                                  :
+	| /   :     :     :  
+      +---+ +---+ +---+ +---+ 
+      | 3 | | 5 | | 6 | | 9 | ..... 36 nodes ....           Layer 2
+      +---+ +---+ +---+ +---+                                 :
+	:      :    :     :                                   :
 							      :
 							      :
                          \\|/ winning moves                   :
@@ -159,6 +162,12 @@ that would lead to that move being chosen by a specific player.
 For example, the 15 rolls {1,3} {3,1} {2,2} {4,\*} {\*,4} might all 
 result in flipping cell 4 and moving to the same next position node,
 so the edge count would be 15.
+
+HiLo game graph with layer boxes:
+![HiLo game graph with layer boxes](output/hilo-no-move-label-KEEP.png)
+
+HiLo game graph with move edge labels:
+![HiLo game graph with move edge labels](output/hilo-move-label-KEEP.png)
 
 Each node also stores the probability of reaching that position,
 which is the sum of probabilites along each path of edges 
@@ -214,7 +223,9 @@ HiLo wins about 8% of the time, so about 2 games in 25.
 
 ## Use
 
-Run the test that generates analytic calculations and Monte Carlo simulation results.
+Run the tests that generate analytic calculations,
+Monte Carlo simulation results, 
+and dump out two variants of game graph for the HiLo strategy.
 
 `mix test`
 

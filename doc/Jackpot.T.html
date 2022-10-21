@@ -12,7 +12,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-X7YVL3G2.js"></script>
-    <script src="dist/sidebar_items-A5FA5F8E.js"></script>
+    <script src="dist/sidebar_items-B664BA2C.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -236,6 +236,17 @@ to right (9th - most signiificant).
 The start position with all cells off (0, false) has index 0.
 The winning position with all cells on (1, true) has index 511
 which is 2^9 - 1.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:layers/0" translate="no">layers()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>The set of possible board indexes after each move.
+The list of indexes in each layer is sorted in ascending order.</p></div>
 
       </div>
 
@@ -689,6 +700,33 @@ to right (9th - most signiificant).
 The start position with all cells off (0, false) has index 0.
 The winning position with all cells on (1, true) has index 511
 which is 2^9 - 1.</p>
+  </section>
+</section>
+<section class="detail" id="t:layers/0">
+
+  <div class="detail-header">
+    <a href="#t:layers/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">layers()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> layers() :: %{required(0..9) =&gt; [<a href="#t:index/0">index</a>()]}</pre>
+
+      </div>
+
+<p>The set of possible board indexes after each move.
+The list of indexes in each layer is sorted in ascending order.</p><p>Layer 0 just contains the start position (index 0).
+Layer 9 just contains the winning position (index 511).
+The number of nodes in each layer, n, is given by the 
+binomial coefficients 9Cn:</p><p><code class="inline">[1,9,36,84,126,126,84,36,9,1]</code></p>
   </section>
 </section>
 <section class="detail" id="t:move/0">
