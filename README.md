@@ -27,15 +27,15 @@ but only if the cell number is one of the following:
 - individual value of the second die
 - combined value of both dice
 
-For example: a roll of {3,4} provides a choice of cells 3, 4 or 7;
-a roll of {2,2} gives a choice of cells 2 or 4; 
-a roll of {6,6} only allows cell 6, because there is no cell 12.
+For example: a roll of `{3,4}` provides a choice of cells 3, 4 or 7;
+a roll of `{2,2}` gives a choice of cells 2 or 4; 
+a roll of `{6,6}` only allows cell 6, because there is no cell 12.
 
 If all the cell choices offered by the dice roll 
 are already flipped up, then the game is lost. 
 
 The game is won if the player succeeds in 
-flipping up all 9 cells. The undersides of the cells 
+flipping up all 9 cells. The undersides of the tiles 
 now display the winning message, 
 typically `*JACKPOT*` or an equivalent Chinese phrase.
 
@@ -61,9 +61,9 @@ Here are some initial observations:
 
 - There are 36 possible rolls of 2 dice.
 - There are 2 rolls that only enable 1 cell choice. 
-  These are the worst rolls: {5,5} {6,6}.
+  These are the worst rolls: `{5,5} {6,6}`.
 - There are 8 rolls that support only 2 cell choices:
-  {1,1} {2,2} {3,3} {4,4} {6,4}{4,6} {6,5}{5,6}.
+  `{1,1} {2,2} {3,3} {4,4} {6,4}{4,6} {6,5}{5,6}`.
 - The remaining 26 rolls support 3 cell choices.
 
 ## Cell Probabilities
@@ -121,10 +121,6 @@ and the chance of 12 is only 1/36,
 but there are only 12 moves available, 
 so it would be very unlikely to win.
 
-The presence of a 1/9 probability cell means the upper bound
-on the success rate is about 11%. 
-The HiLo strategy does quite well to get to 8%.
-
 ## Game Graph
 
 A game graph is a directed graph
@@ -139,7 +135,7 @@ from 0 (start) to 9 (win).
 So the layer number, n, is equal to how many cells are flipped up,
 and hence the number of 1s in the binary index.
 The number of nodes in layer n is the binomial coefficient 9Cn,
-so the layer populations are:
+so the layer counts are:
 
 `[ 1, 9, 36, 84, 126, 126, 84, 36, 9, 1 ]`
 
@@ -156,7 +152,7 @@ which does not have any outgoing edges.
                        +---+
 		START  | 0 |                                Layer 0
                        +---+
-	:     :       ///|\\\\\\\\\\ first moves
+	:     :       ///|\\\\ first moves
     flip 1  flip 2       |flip 4
         |     |    :     |      :      :     :       :
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+ 
@@ -185,7 +181,7 @@ The edge corresponds to the flipping of exactly one cell in the board.
 Each edge is weighted with the count of the number of rolls of the dice
 that would lead to that move being chosen by a specific player.
 
-For example, the 15 rolls {1,3} {3,1} {2,2} {4,\*} {\*,4} might all 
+For example, the 15 rolls `{1,3}{3,1} {2,2} {4,*}{*,4}` might all 
 result in flipping cell 4 and moving to the same next position node,
 so the edge count would be 15 (meaning 15/36 as a probability).
 
@@ -267,7 +263,9 @@ Generate the documentation:
 
 ## License
 
-This repo is released under the MIT License.
+This software is open source, released under the [MIT License](LICENSE.txt).
+
+The code and documentation are Copyright © 2022 Mike French
 
 
 
