@@ -124,17 +124,20 @@ so it would be very unlikely to win.
 ## Game Graph
 
 A game graph is a directed graph
-containing board positions as nodes and moves as edges.
+containing board positions as nodes and moves as directed edges.
 The set of nodes contains all 512 possible board positions.
 The board position nodes are labelled with the integer index
 calculated from treating the cells as binary digits,
 from 1 (least significant) to 9 (most significant).
+For example, the position with cells 2 and 4 flipped
+corresponds to the binary number `000001010` (note the reversed order)
+with an index value of `2^1+2^3 = 2 + 8 = 12`.
 
 The graph is layered by how many moves have been made
 from 0 (start) to 9 (win). 
-So the layer number, n, is equal to how many cells are flipped up,
+So the layer number, _n,_ is equal to how many cells are flipped up,
 and hence the number of 1s in the binary index.
-The number of nodes in layer n is the binomial coefficient 9Cn,
+The number of nodes in layer _n_ is the binomial coefficient _9Cn,_
 so the layer counts are:
 
 `[ 1, 9, 36, 84, 126, 126, 84, 36, 9, 1 ]`
@@ -186,21 +189,21 @@ result in flipping cell 4 and moving to the same next position node,
 so the edge count would be 15 (meaning 15/36 as a probability).
 
 HiLo game graph with layer boxes:
-![HiLo game graph with layer boxes](output/hilo-no-move-label-KEEP.png)
+![HiLo game graph with layer boxes](output/hilo-no-move-label-KEEP.png?raw=true)
 
 HiLo game graph with move edge labels:
-![HiLo game graph with move edge labels](output/hilo-move-label-KEEP.png)
+![HiLo game graph with move edge labels](output/hilo-move-label-KEEP.png?raw=true)
 
 Each node also stores the probability of reaching that position,
 which is the sum of probabilites along each path of edges 
 leading to the position. 
 
 To calculate the full set of probabilities for every node in the graph:
-- Initialize the probability of the start node (index 0) to 1.0.
+- Initialize the probability of the start node (index 0) to `1.0`.
 - For each position node, in order of layers:
   - For each edge going out from the source node:
       - Calculate the edge contribution as the source node probability
-        multiplied by the edge weight, which is edge count/36.
+        multiplied by the edge weight, which is `edge count/36`.
       - Increment the destination node probability with the edge contribution.
   - At the last node (index 511, layer 9), there are no outgoing edges,
     and the final value is the winning probability.
