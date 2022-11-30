@@ -152,29 +152,29 @@ The final (sink) node is the winning position (index 511),
 which does not have any outgoing edges.  
 
 ```
-                       +---+
-		START  | 0 |                                Layer 0
-                       +---+
-	:     :       ///|\\\\ first moves
-    flip 1  flip 2       |flip 4
-        |     |    :     |      :      :     :       :
-      +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+ 
-      | 1 | | 2 | | 4 | | 8 | | 16 | | 32 | | 64 | | 128 |  Layer 1
-      +---+ +---+ +---+ +---+ +----+ +----+ +----+ +-----+
-	|     /     :     :      :      :      :      :
+                        +---+
+		 START  | 0 |                                  Layer 0
+                        +---+
+	:     :        ///|\\\\ first moves
+    flip 1  flip 2        |flip 4
+        |     |    :      |     :      :     :       :     :
+      +---+ +---+ +---+ +---+ +----+ +----+ +----+ +---+ +---+
+      | 1 | | 2 | | 4 | | 8 | | 16 | | 32 | | 64 | |128| |256| Layer 1
+      +---+ +---+ +---+ +---+ +----+ +----+ +----+ +---+ +---+
+	|     /     :     :      :      :      :     :     :
 	|    /
   flip 2|   /flip 1
 	|  /
 	| /   :     :     :  
       +---+ +---+ +---+ +---+ 
-      | 3 | | 5 | | 6 | | 9 | ..... 36 nodes ....           Layer 2
-      +---+ +---+ +---+ +---+                                 :
-	:      :    :     :                                   :
-							      :
-							      :
-                         \\|/ winning moves                   :
-			+-----+                               :
-		   WIN  | 511 |                             Layer 9
+      | 3 | | 5 | | 6 | | 9 | ..... 36 nodes ....              Layer 2
+      +---+ +---+ +---+ +---+                                    :
+	:      :    :     :                                      :
+							         :
+							         :
+                        \\\|/// winning moves                      :
+			+-----+                                  :
+		   WIN  | 511 |                                Layer 9
 			+-----+               
 ```
 
@@ -266,9 +266,10 @@ Generate the documentation:
 
 ## License
 
-This software is open source, released under the [MIT License](LICENSE.txt).
+This software is released under the permissive open source [MIT License](LICENSE.txt).
 
 The code and documentation are Copyright © 2022 Mike French
+
 
 
 
