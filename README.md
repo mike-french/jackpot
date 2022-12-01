@@ -131,14 +131,15 @@ calculated from treating the cells as binary digits,
 from 1 (least significant) to 9 (most significant).
 For example, the position with cells 2 and 4 flipped
 corresponds to the binary number `000001010` (note the reversed order)
-with an index value of `2^1+2^3 = 2 + 8 = 12`.
+with an index value of `2^1 + 2^3 = 2 + 8 = 10`.
 
 The graph is layered by how many moves have been made
 from 0 (start) to 9 (win). 
-So the layer number, _n,_ is equal to how many cells are flipped up,
+The layer number, _n,_ is equal to how many cells are flipped up,
 and hence the number of 1s in the binary index.
-The number of nodes in layer _n_ is the binomial coefficient _9Cn,_
-so the layer counts are:
+The number of nodes in layer _n_ is just the binomial coefficient _9Cn,_
+i.e. the number of ways to choose _n_ bits from 9. 
+So the layer counts are:
 
 `[ 1, 9, 36, 84, 126, 126, 84, 36, 9, 1 ]`
 
@@ -157,7 +158,7 @@ which does not have any outgoing edges.
                         +---+
 	:     :        ///|\\\\ first moves
     flip 1  flip 2        |flip 4
-        |     |    :      |     :      :     :       :     :
+        |     |    :      |      :      :      :     :     :
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +---+ +---+
       | 1 | | 2 | | 4 | | 8 | | 16 | | 32 | | 64 | |128| |256| Layer 1
       +---+ +---+ +---+ +---+ +----+ +----+ +----+ +---+ +---+
@@ -172,7 +173,7 @@ which does not have any outgoing edges.
 	:      :    :     :                                      :
 							         :
 							         :
-                        \\\|/// winning moves                      :
+                        \\\|/// winning moves                    :
 			+-----+                                  :
 		   WIN  | 511 |                                Layer 9
 			+-----+               
